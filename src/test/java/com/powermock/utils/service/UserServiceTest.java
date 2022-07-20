@@ -10,8 +10,6 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 
-import javax.management.OperationsException;
-
 import static org.junit.Assert.*;
 
 /**
@@ -27,8 +25,11 @@ public class UserServiceTest {
     @Mock
     private UserDao userDao;
 
+    /**
+     * 有返回值的测试方法如下
+     * */
     @Test
-    public void testWithPowermock() {
+    public void testQueryUserCountWithPowermock() {
         UserDao dao = PowerMockito.mock(UserDao.class);
 //        PowerMockito.doReturn(10).when(dao).getCount();
         PowerMockito.when(dao.getCount()).thenReturn(10);
@@ -37,9 +38,24 @@ public class UserServiceTest {
         assertEquals(10, result);
     }
 
+    /**
+     * 无返回值时的测试方法
+     */
+    @Test
+    public void testSaveUserWithPowermock() {
+        UserDao dao = PowerMockito.mock(UserDao.class);
+        User user = new User();
+        //在执行无返回值的方法时，不抛出异常，doNothing
+        PowerMockito.doNothing().when(dao).insertUser(user);
+        UserService userService = new UserService(dao);
+        userService.saveUser(user);
+        //查看dao层中insertUser方法是否调用User，类似于assert
+        Mockito.verify(dao).insertUser(user);
+    }
+
     @Ignore
     @Test
-    public void testWithMockito() {
+    public void testQueryUserCountWithMockito() {
         MockitoAnnotations.initMocks(this);
         UserService service = new UserService(userDao);
         Mockito.when(userDao.getCount()).thenReturn(10);

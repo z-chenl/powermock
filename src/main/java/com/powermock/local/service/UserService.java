@@ -1,7 +1,7 @@
-package com.powermock.utils.service;
+package com.powermock.local.service;
 
 import com.powermock.common.User;
-import com.powermock.utils.dao.UserDao;
+import com.powermock.local.dao.UserDao;
 
 /**
  * @ClassName UserService
@@ -10,20 +10,18 @@ import com.powermock.utils.dao.UserDao;
  * @Author chen
  */
 public class UserService {
-    private UserDao userDao;
-
-    public UserService(UserDao userDao) {
-        this.userDao = userDao;
-    }
 
     public int queryUserCount() {
-        return this.userDao.getCount();
+        UserDao userDao = new UserDao();
+        return userDao.getCount();
     }
+
     /**
      * 没有返回值 void
      * 测试是不可以使用assert断言
-     * */
-    public void saveUser(User user){
+     */
+    public void saveUser(User user) {
+        UserDao userDao = new UserDao();
         userDao.insertUser(user);
     }
 }
